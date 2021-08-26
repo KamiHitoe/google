@@ -1,0 +1,12 @@
+
+{
+  "manifest_version": 2,
+  "name": "customized new tab",
+  "version": "1.0",
+
+  "chrome_url_overrides": {
+    "newtab": "new.html"
+  }
+
+}
+
