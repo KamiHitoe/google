@@ -220,10 +220,120 @@ func main() {
 			break
 		}
 	}
+
+	// enumerate()
+	s := []int{2, 3, 8}
+	for i, v := range s {
+		fmt.Println(i, v)
+	}
+	// for v in s
+	for _, v := range s { // _は廃棄される
+		fmt.Println(v)
+	}
+
+	m := map[string]int{"hoge": 1, "fuga": 2}
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
 }
 ```
 
+## 構造体(object)
+main関数の中に書く必要がない。メソッドもOOPのそれではなく  
+単に構造体に関数を紐づけただけのようなもの
 
 
+```go
+type human struct {
+	name  string
+	score int
+}
 
+// 値渡し
+func (h human) show() { // (reserver) func()
+	fmt.Printf("name: %s, score: %d\n", h.name, h.score)
+}
+
+// 参照渡し
+func (h *human) hit() {
+	h.score++
+}
+
+func main() {
+	// instanceの生成
+	taro := new(human)
+	taro.name = "taro"
+	taro.score = 60
+	fmt.Println(taro) // &pointer
+
+	jiro := human{name: "jiro", score: 70}
+	fmt.Println(jiro) // *data
+
+	taro.hit()
+	taro.show()
+}
+```
+
+## インターフェース
+共通するメソッドをもつ構造体をまとめる(ポリモーフィズム？)
+
+```go
+type greeter interface {
+	greet()
+}
+
+type japanese struct{}
+type american struct{}
+
+func (j japanese) greet() {
+	fmt.Printf("konnichiwa")
+}
+
+func (a american) greet() {
+	fmt.Printf("hello")
+}
+
+func main() {
+	greeters := []greeter{japanese{}, american{}}
+	for _, greeter := range greeters {
+		greeter.greet()
+	}
+}
+```
+
+## 並行処理
+- go: 処理をバックグラウンドで行う
+- chan: バックグラウンド処理の値を参照
+
+```go
+import (
+	"fmt"
+	"time"
+)
+
+func job1(result chan string) {
+	time.Sleep(time.Second * 2)
+	fmt.Println("job1 finishd")
+	result <- "job1 result"
+}
+
+func job2() {
+	fmt.Println("job2 finishd")
+}
+
+func main() {
+	// chanel
+	result := make(chan string)
+
+	// バックグラウンド処理
+	go job1(result)
+	go job2()
+
+	// resultが返るまで待つ
+	fmt.Println(<-result)
+
+	// main()が先に終わるのを防ぐ
+	time.Sleep(time.Second * 3)
+}
+```
 
