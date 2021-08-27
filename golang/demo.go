@@ -2,12 +2,12 @@ package main
 
 import "fmt"
 
-func main() {
-	// 変数の初期化
-	msg := "Hello, World"
-	var a, b int
-	a, b = 10, 20
+func hello(name string) string {
+	fmt.Printf("hello " + name + "\n")
+	return name
+}
 
-	fmt.Println(msg)
-	fmt.Println(a, b)
+func main() {
+	a := hello("hitoe")
+	fmt.Printf(a)
 }
